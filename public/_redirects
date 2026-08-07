@@ -1,0 +1,7 @@
+# SPA fallbacks. The /admin rules must come first — the catch-all below would
+# otherwise hand the panel's deep links to the storefront document.
+/admin       /admin.html   200
+/admin/*     /admin.html   200
+# Old top-level bookmark; the panel redirects it on to /admin/login.
+/login       /admin.html   200
+/*           /index.html   200

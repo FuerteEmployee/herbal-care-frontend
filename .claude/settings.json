@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -f e2e-tmp.js)",
+      "Bash(node -e ' *)",
+      "Bash(python -c ' *)",
+      "Bash(echo \"== exit $? ==\")",
+      "Bash(echo \"exit $?\")",
+      "Bash(pkill -f \"vite.*5199\")",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); console.log\\('MONGO_URI set:', !!process.env.MONGO_URI\\); console.log\\('JWT set:', !!process.env.JWT_SECRET\\)\")",
+      "Bash(node \"C:/Users/johnf/AppData/Local/Temp/claude/d--Herbal-Gujarat-herbal-admin/40db309b-0a57-4318-b88b-294b0b7e4bf2/scratchpad/rolesmoke.mjs\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(curl -s -m 2 -o /dev/null -w \"\" http://localhost:5173/)",
+      "Bash(curl -s -m 3 http://localhost:5000/)"
+    ]
+  }
+}

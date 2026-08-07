@@ -1,0 +1,33 @@
+import {
+  LayoutDashboard,
+  Package,
+  PackagePlus,
+  Tags,
+  FileText,
+  Contact,
+  MessageSquare,
+  ShoppingCart,
+  Truck,
+  Users,
+  ShieldCheck,
+  KeyRound,
+  BookOpen,
+  Star,
+} from 'lucide-react'
+
+export const ICON_MAP = {
+  LayoutDashboard,
+  Package,
+  PackagePlus,
+  Tags,
+  FileText,
+  Contact,
+  MessageSquare,
+  ShoppingCart,
+  Truck,
+  Users,
+  ShieldCheck,
+  KeyRound,
+  BookOpen,
+  Star,
+}

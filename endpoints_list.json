@@ -1,0 +1,1022 @@
+[
+  {
+    "file": "barcode.api.js",
+    "line": 4,
+    "code": "return api.post('/barcode/generate-missing', {})"
+  },
+  {
+    "file": "barcode.api.js",
+    "line": 8,
+    "code": "return api.downloadFile(`/barcode/${id}/label.pdf`, filename)"
+  },
+  {
+    "file": "barcode.api.js",
+    "line": 12,
+    "code": "return api.downloadFile('/barcode/print/bulk', 'barcode-labels.pdf', { productIds, copies })"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 40,
+    "code": "const items = await api.get('/billing/invoices')"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 45,
+    "code": "return mapInvoiceFromApi(await api.get(`/billing/invoices/${id}`))"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 49,
+    "code": "const invoice = await api.post(`/billing/invoices/from-order/${orderId}`, {})"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 54,
+    "code": "const invoice = await api.put(`/billing/invoices/${id}/payment-status`, { paymentStatus: status })"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 59,
+    "code": "const result = await api.post(`/billing/invoices/${id}/cancel`, { reason })"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 73,
+    "code": "await api.downloadFile(`/billing/invoices/${id}/pdf`, `${id}.pdf`)"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 79,
+    "code": "return api.get('/company-settings')"
+  },
+  {
+    "file": "billing.api.js",
+    "line": 83,
+    "code": "return api.put('/company-settings', data)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 98,
+    "code": "const items = await api.get('/products')"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 112,
+    "code": "const res = await api.get(`/products${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 117,
+    "code": "const product = await api.get(`/products/${id}`)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 129,
+    "code": "const created = await api.post('/products', mapProductToApi(data))"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 132,
+    "code": "const withBarcode = await api.post(`/barcode/${created._id}/generate`, barcodeInput ? { code: barcodeInput } : {})"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 137,
+    "code": "const updated = await api.put(`/products/${id}`, mapProductToApi(data))"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 143,
+    "code": "const withBarcode = await api.post(`/barcode/${id}/generate`, { code: barcodeInput })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 150,
+    "code": "return api.delete(`/products/${id}`)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 154,
+    "code": "return api.post('/products/bulk-delete', { ids })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 161,
+    "code": "const updated = await api.post(`/barcode/${id}/generate`, code ? { code } : {})"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 169,
+    "code": "return api.post('/barcode/scan-dispatch', { code, warehouseId })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 176,
+    "code": "const { url } = await api.upload('/uploads', formData)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 186,
+    "code": "const { urls } = await api.upload('/uploads/multiple', formData)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 214,
+    "code": "const categories = await api.get('/products/categories/all')"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 219,
+    "code": "const created = await api.post('/products/categories', mapCategoryToApi(data))"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 224,
+    "code": "const updated = await api.put(`/products/categories/${id}`, mapCategoryToApi(data))"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 229,
+    "code": "return api.delete(`/products/categories/${id}`)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 233,
+    "code": "return api.post('/products/categories/bulk-delete', { ids })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 243,
+    "code": "const items = await api.get('/products/subcategories/all')"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 248,
+    "code": "const created = await api.post('/products/subcategories', {"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 257,
+    "code": "const updated = await api.put(`/products/subcategories/${id}`, {"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 266,
+    "code": "return api.delete(`/products/subcategories/${id}`)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 270,
+    "code": "return api.post('/products/subcategories/bulk-delete', { ids })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 280,
+    "code": "const items = await api.get('/products/brands/all')"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 286,
+    "code": "await api.post('/products/brands', { name: data.name, logo: data.logo || undefined, description: data.description || undefined })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 292,
+    "code": "await api.put(`/products/brands/${id}`, { name: data.name, logo: data.logo || undefined, description: data.description || undefined })"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 297,
+    "code": "return api.delete(`/products/brands/${id}`)"
+  },
+  {
+    "file": "catalog.api.js",
+    "line": 301,
+    "code": "return api.post('/products/brands/bulk-delete', { ids })"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 62,
+    "code": "const items = await api.get(url)"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 67,
+    "code": "const customer = await api.get(`/customers/${id}`)"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 72,
+    "code": "const created = await api.post('/customers', mapCustomerToApi(data))"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 77,
+    "code": "const updated = await api.put(`/customers/${id}`, mapCustomerToApi(data))"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 82,
+    "code": "return api.delete(`/customers/${id}`)"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 86,
+    "code": "return api.post('/customers/bulk-delete', { ids })"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 93,
+    "code": "return api.upload('/customers/import', formData)"
+  },
+  {
+    "file": "customers.api.js",
+    "line": 99,
+    "code": "return api.downloadFile(`/customers/export?format=${format}&range=${range}${idsParam}`, filename)"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 4,
+    "code": "return api.get('/dashboard/stats')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 8,
+    "code": "const status = await api.get('/dashboard/inventory-status')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 13,
+    "code": "return api.get('/dashboard/stats/warehouse')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 17,
+    "code": "return api.get('/dashboard/stats/customers')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 21,
+    "code": "return api.get('/dashboard/stats/suppliers')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 25,
+    "code": "return api.get('/dashboard/stats/purchases')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 29,
+    "code": "return api.get(`/dashboard/stock-movement-trend?days=${days}`)"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 33,
+    "code": "return api.get(`/dashboard/top-moving-products?days=${days}`)"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 37,
+    "code": "return api.get('/dashboard/reports/warehouse')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 41,
+    "code": "return api.get('/dashboard/reports/inventory')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 45,
+    "code": "return api.get('/dashboard/reports/movement')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 49,
+    "code": "return api.get('/dashboard/reports/dispatch')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 53,
+    "code": "return api.get('/dashboard/reports/adjustment')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 57,
+    "code": "return api.get('/dashboard/reports/transfer')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 61,
+    "code": "return api.get('/dashboard/reports/damage')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 76,
+    "code": "await api.downloadFile(`${path}?export=${format}`, `${reportKey}_report.${format}`)"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 82,
+    "code": "const data = await api.get('/dashboard/sales-trend?months=6')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 94,
+    "code": "return api.get('/dashboard/reports/revenue')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 100,
+    "code": "return api.get('/dashboard/reports/gst')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 104,
+    "code": "return api.get('/dashboard/reports/hsn-summary')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 108,
+    "code": "const purchases = await api.get('/purchase')"
+  },
+  {
+    "file": "dashboard.api.js",
+    "line": 118,
+    "code": "const customers = await api.get('/customers')"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 58,
+    "code": "const items = await api.get(`/delivery${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 68,
+    "code": "const delivery = await api.get(`/delivery/${id}`)"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 73,
+    "code": "const items = await api.get('/delivery/executives')"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 78,
+    "code": "const executive = await api.post('/delivery/executives', {"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 89,
+    "code": "const executive = await api.put(`/delivery/executives/${id}`, {"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 100,
+    "code": "const delivery = await api.post('/delivery/assign', { orderId, executiveId })"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 105,
+    "code": "const result = await api.post('/delivery/auto-assign', {})"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 110,
+    "code": "const items = await api.post('/delivery/bulk-assign', { orderIds, executiveId })"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 115,
+    "code": "const delivery = await api.put(`/delivery/${id}/location`, { lat, lng, eta })"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 120,
+    "code": "const delivery = await api.put(`/delivery/${id}/status`, { status })"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 127,
+    "code": "const delivery = await api.post(`/delivery/${id}/confirm`, { receiverName, receiverPhone, remarks, photoUrl })"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 132,
+    "code": "return api.post(`/delivery/${id}/otp/generate`, {})"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 137,
+    "code": "await api.post(`/delivery/${id}/otp/verify`, { code: otp })"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 144,
+    "code": "const delivery = await api.get(`/delivery/${id}`)"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 152,
+    "code": "const { url } = await api.upload('/uploads/delivery-proof', formData)"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 157,
+    "code": "return api.get('/delivery/reports/executive-performance')"
+  },
+  {
+    "file": "delivery.api.js",
+    "line": 161,
+    "code": "return api.get('/delivery/reports/daily')"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 53,
+    "code": "const employees = await api.get('/employees')"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 59,
+    "code": "const detail = await api.get(`/employees/${e._id}`)"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 66,
+    "code": "const detail = await api.get(`/employees/${id}`)"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 71,
+    "code": "const created = await api.post('/employees', mapEmployeeToApi(data))"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 76,
+    "code": "const updated = await api.put(`/employees/${id}`, mapEmployeeToApi(data))"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 81,
+    "code": "return api.delete(`/employees/${id}`)"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 85,
+    "code": "return api.post('/employees/bulk-delete', { ids })"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 89,
+    "code": "const detail = await api.get(`/employees/${employeeId}`)"
+  },
+  {
+    "file": "employees.api.js",
+    "line": 97,
+    "code": "const detail = await api.get(`/employees/${employeeId}`)"
+  },
+  {
+    "file": "inventory.api.js",
+    "line": 4,
+    "code": "const products = await api.get('/inventory/live-stock')"
+  },
+  {
+    "file": "inventory.api.js",
+    "line": 24,
+    "code": "api.get('/inventory/live-stock'),"
+  },
+  {
+    "file": "inventory.api.js",
+    "line": 25,
+    "code": "api.get('/inventory/warehouse-stock'),"
+  },
+  {
+    "file": "inventory.api.js",
+    "line": 45,
+    "code": "const items = await api.get('/inventory/low-stock')"
+  },
+  {
+    "file": "inventory.api.js",
+    "line": 56,
+    "code": "const items = await api.get('/inventory/out-of-stock')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 37,
+    "code": "const items = await api.get('/marketing/broadcasts')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 42,
+    "code": "const broadcast = await api.post('/marketing/broadcasts', {"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 75,
+    "code": "const items = await api.get('/marketing/festival-offers')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 80,
+    "code": "const offer = await api.post('/marketing/festival-offers', mapFestivalOfferToApi(data))"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 85,
+    "code": "const offer = await api.put(`/marketing/festival-offers/${id}`, mapFestivalOfferToApi(data))"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 90,
+    "code": "return api.delete(`/marketing/festival-offers/${id}`)"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 107,
+    "code": "const items = await api.get('/marketing/promotions')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 112,
+    "code": "const campaign = await api.post('/marketing/promotions', {"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 122,
+    "code": "const campaign = await api.put(`/marketing/promotions/${id}`, {"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 132,
+    "code": "return api.delete(`/marketing/promotions/${id}`)"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 178,
+    "code": "const items = await api.get('/marketing-automation/workflows')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 183,
+    "code": "const workflow = await api.post('/marketing-automation/workflows', mapWorkflowToApi(data))"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 188,
+    "code": "const workflow = await api.put(`/marketing-automation/workflows/${id}`, mapWorkflowToApi(data))"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 193,
+    "code": "return api.delete(`/marketing-automation/workflows/${id}`)"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 197,
+    "code": "return api.post('/marketing-automation/workflows/bulk-delete', { ids })"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 201,
+    "code": "const workflow = await api.post(`/marketing-automation/workflows/${id}/duplicate`, {})"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 206,
+    "code": "const workflow = await api.put(`/marketing-automation/workflows/${id}/status`, { status })"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 211,
+    "code": "return api.post(`/marketing-automation/workflows/${id}/run`, {})"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 221,
+    "code": "const items = await api.get('/marketing-automation/templates')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 226,
+    "code": "const template = await api.post('/marketing-automation/templates', {"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 236,
+    "code": "const template = await api.put(`/marketing-automation/templates/${id}`, {"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 246,
+    "code": "return api.delete(`/marketing-automation/templates/${id}`)"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 250,
+    "code": "return api.post('/marketing-automation/templates/bulk-delete', { ids })"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 281,
+    "code": "const items = await api.get('/marketing-automation/segments')"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 286,
+    "code": "const segment = await api.post('/marketing-automation/segments', mapCustomerSegmentToApi(data))"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 291,
+    "code": "const segment = await api.put(`/marketing-automation/segments/${id}`, mapCustomerSegmentToApi(data))"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 296,
+    "code": "return api.delete(`/marketing-automation/segments/${id}`)"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 307,
+    "code": "const res = await api.get(`/marketing-automation/logs${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "marketing.api.js",
+    "line": 331,
+    "code": "return api.get('/marketing-automation/analytics')"
+  },
+  {
+    "file": "notifications.api.js",
+    "line": 4,
+    "code": "return api.get('/admin-notifications')"
+  },
+  {
+    "file": "notifications.api.js",
+    "line": 8,
+    "code": "return api.put(`/admin-notifications/${id}/read`, {})"
+  },
+  {
+    "file": "notifications.api.js",
+    "line": 12,
+    "code": "return api.put('/admin-notifications/read-all', {})"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 59,
+    "code": "const items = await api.get('/orders')"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 64,
+    "code": "const order = await api.get(`/orders/${id}`)"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 69,
+    "code": "const order = await api.post('/orders', {"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 92,
+    "code": "const order = await api.put(`/orders/${id}`, {"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 115,
+    "code": "return api.delete(`/orders/${id}`)"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 128,
+    "code": "const order = await api.post(`/orders/${id}/${action}`, {})"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 135,
+    "code": "return api.post(`/orders/${orderId}/scan`, { barcode })"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 139,
+    "code": "const order = await api.post(`/orders/${orderId}/return`, { reason })"
+  },
+  {
+    "file": "orders.api.js",
+    "line": 151,
+    "code": "const order = await api.put(`/orders/${orderId}/return`, { status })"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 40,
+    "code": "const items = await api.get('/purchase')"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 45,
+    "code": "const items = await api.get('/purchase/pending')"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 57,
+    "code": "const items = await api.get('/purchase/history')"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 75,
+    "code": "const po = await api.post('/purchase', {"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 87,
+    "code": "const po = await api.put(`/purchase/${id}`, {"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 99,
+    "code": "return api.delete(`/purchase/${id}`)"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 103,
+    "code": "return api.post('/purchase/bulk-delete', { ids })"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 107,
+    "code": "const po = await api.put(`/purchase/${id}/status`, { status })"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 112,
+    "code": "const invoice = await api.get(`/purchase/${id}/invoice`)"
+  },
+  {
+    "file": "purchase.api.js",
+    "line": 129,
+    "code": "return api.get(`/purchase-invoices/${id}/print`)"
+  },
+  {
+    "file": "roles.api.js",
+    "line": 8,
+    "code": "const items = await api.get('/roles/all')"
+  },
+  {
+    "file": "roles.api.js",
+    "line": 13,
+    "code": "const created = await api.post('/roles', { name: data.name, description: data.description || undefined, permissions: data.permissions ?? [] })"
+  },
+  {
+    "file": "roles.api.js",
+    "line": 18,
+    "code": "const updated = await api.put(`/roles/${id}`, {"
+  },
+  {
+    "file": "roles.api.js",
+    "line": 28,
+    "code": "const cloned = await api.post(`/roles/${id}/clone`)"
+  },
+  {
+    "file": "roles.api.js",
+    "line": 33,
+    "code": "return api.delete(`/roles/${id}`)"
+  },
+  {
+    "file": "roles.api.js",
+    "line": 37,
+    "code": "return api.post('/roles/bulk-delete', { ids })"
+  },
+  {
+    "file": "supplierInvoices.api.js",
+    "line": 58,
+    "code": "const items = await api.get(`/supplier-invoices${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "supplierInvoices.api.js",
+    "line": 63,
+    "code": "const invoice = await api.get(`/supplier-invoices/${id}`)"
+  },
+  {
+    "file": "supplierInvoices.api.js",
+    "line": 68,
+    "code": "const created = await api.post('/supplier-invoices', {"
+  },
+  {
+    "file": "supplierInvoices.api.js",
+    "line": 81,
+    "code": "const updated = await api.put(`/supplier-invoices/${id}/payment-status`, { paymentStatus, amountPaid })"
+  },
+  {
+    "file": "supplierInvoices.api.js",
+    "line": 86,
+    "code": "return api.delete(`/supplier-invoices/${id}`)"
+  },
+  {
+    "file": "supplierInvoices.api.js",
+    "line": 90,
+    "code": "return api.post('/supplier-invoices/bulk-delete', { ids })"
+  },
+  {
+    "file": "supplierProducts.api.js",
+    "line": 51,
+    "code": "const items = await api.get(`/supplier-products${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "supplierProducts.api.js",
+    "line": 56,
+    "code": "const item = await api.get(`/supplier-products/${id}`)"
+  },
+  {
+    "file": "supplierProducts.api.js",
+    "line": 61,
+    "code": "const created = await api.post('/supplier-products', mapSupplierProductToApi(data))"
+  },
+  {
+    "file": "supplierProducts.api.js",
+    "line": 66,
+    "code": "const updated = await api.put(`/supplier-products/${id}`, mapSupplierProductToApi(data))"
+  },
+  {
+    "file": "supplierProducts.api.js",
+    "line": 71,
+    "code": "return api.delete(`/supplier-products/${id}`)"
+  },
+  {
+    "file": "supplierProducts.api.js",
+    "line": 75,
+    "code": "return api.post('/supplier-products/bulk-delete', { ids })"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 93,
+    "code": "const [suppliers, requests] = await Promise.all([api.get('/suppliers'), api.get('/suppliers/requests')])"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 117,
+    "code": "const res = await api.get(`/suppliers${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 127,
+    "code": "const supplier = await api.get(`/suppliers/${id}`)"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 132,
+    "code": "const created = await api.post('/suppliers', mapSupplierToApi(data))"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 137,
+    "code": "const updated = await api.put(`/suppliers/${id}`, mapSupplierToApi(data))"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 142,
+    "code": "return api.delete(`/suppliers/${id}`)"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 146,
+    "code": "return api.post('/suppliers/bulk-delete', { ids })"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 150,
+    "code": "return api.put(`/suppliers/${id}/archive`, {})"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 154,
+    "code": "return api.put(`/suppliers/${id}/restore`, {})"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 161,
+    "code": "const { url } = await api.upload('/uploads/supplier-document', formData)"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 169,
+    "code": "api.get('/suppliers/missing-products'),"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 170,
+    "code": "api.get('/suppliers'),"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 183,
+    "code": "const request = await api.post('/suppliers/requests', {"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 191,
+    "code": "const requests = await api.get('/suppliers/requests')"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 201,
+    "code": "await api.post(`/suppliers/requests/${latest._id}/notify`, {})"
+  },
+  {
+    "file": "suppliers.api.js",
+    "line": 206,
+    "code": "return api.post('/suppliers/stock-entry', { productId, qty })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 33,
+    "code": "const items = await api.get('/warehouse')"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 45,
+    "code": "const res = await api.get(`/warehouse${qs ? `?${qs}` : ''}`)"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 50,
+    "code": "const created = await api.post('/warehouse', mapWarehouseToApi(data))"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 55,
+    "code": "const updated = await api.put(`/warehouse/${id}`, mapWarehouseToApi(data))"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 60,
+    "code": "return api.delete(`/warehouse/${id}`)"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 64,
+    "code": "return api.post('/warehouse/bulk-delete', { ids })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 74,
+    "code": "defaultWarehouseIdPromise = api.get('/warehouse').then((items) => items[0]?._id)"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 95,
+    "code": "const items = await api.get('/purchase?status=dispatched')"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 100,
+    "code": "const items = await api.get('/purchase?status=received')"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 107,
+    "code": "api.get(`/purchase/${poId}/invoice`),"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 110,
+    "code": "return api.post(`/warehouse/${warehouseId}/receive`, { poId, items })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 115,
+    "code": "return api.post(`/warehouse/${warehouseId}/verify`, { poId, checklist })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 120,
+    "code": "return api.put(`/warehouse/${warehouseId}/stock`, { product: productId, qty })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 125,
+    "code": "return api.post(`/warehouse/${warehouseId}/dispatch`, { items: [{ product: productId, qty }], vehicleDetails: vehicleDetails || undefined })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 130,
+    "code": "const items = await api.get(`/warehouse/${warehouseId}/dispatches`)"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 148,
+    "code": "return api.put(`/warehouse/${warehouseId}/dispatches/${dispatchId}/deliver`, {})"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 153,
+    "code": "const adjustment = await api.post(`/warehouse/${warehouseId}/adjustments`, { product: productId, delta, reason })"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 167,
+    "code": "const adjustment = await api.post(`/warehouse/${warehouseId}/adjustments`, {"
+  },
+  {
+    "file": "warehouse.api.js",
+    "line": 181,
+    "code": "const items = await api.get(`/warehouse/${warehouseId}/adjustments`)"
+  }
+]
