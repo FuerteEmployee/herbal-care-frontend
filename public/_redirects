@@ -1,3 +1,7 @@
+# Netlify-only. The live site runs nginx, which ignores this file entirely —
+# see deploy/nginx.conf for the config that actually routes production, and
+# deploy/README.md for the rules all of them share.
+#
 # SPA fallbacks. The /admin rules must come first — the catch-all below would
 # otherwise hand the panel's deep links to the storefront document.
 /admin       /admin.html   200

@@ -1,0 +1,58 @@
+# Apache equivalent of deploy/nginx.conf — kept for reference only.
+#
+# herbalgujratcare.com currently runs nginx, which ignores .htaccess entirely.
+# Nothing in this file has any effect there; use deploy/nginx.conf instead.
+# This exists so the routing rules survive a move to Apache / cPanel shared
+# hosting, where it would be copied to the document root next to index.html.
+#
+# Same job as the nginx config: two SPA documents in one directory, and every
+# deep link has to reach the right one.
+#
+#   index.html  → storefront   owns  /
+#   admin.html  → admin panel  owns  /admin/*
+
+# Content negotiation would otherwise let Apache answer /admin with admin.html
+# on its own and bypass the rules below, so turn it off and be explicit.
+Options -MultiViews
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Real files and directories are served as-is — assets, images, favicons.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Admin panel first: the storefront catch-all below would otherwise swallow
+  # /admin/login and hand it the wrong document.
+  RewriteRule ^admin$      admin.html [L]
+  RewriteRule ^admin/      admin.html [L]
+  # Old top-level bookmark; the panel redirects it on to /admin/login.
+  RewriteRule ^login$      admin.html [L]
+
+  # Storefront.
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # The HTML documents name content-hashed assets, so a cached copy outlives
+  # the build it belongs to and points at files that no longer exist.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-store"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # Hashed filenames — a given URL's contents never change.
+  <FilesMatch "^.+\.[0-9a-zA-Z_-]{8,}\.(js|css|woff2?|png|jpe?g|svg|webp)$">
+    ExpiresDefault "access plus 1 year"
+    Header set Cache-Control "public, immutable"
+  </FilesMatch>
+</IfModule>
+
+# Netlify-only routing file; no meaning on Apache.
+<Files "_redirects">
+  Require all denied
+</Files>

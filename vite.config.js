@@ -25,10 +25,11 @@ const HTML = { main: 'index.html', admin: 'admin.html' }
  * everything else — including /admin.html itself and all asset requests — to
  * Vite's own fallback.
  *
- * Keep this list in sync with public/_redirects, which does the same job in
- * production; dev, preview and the deployed site should agree on who serves
- * what. /login is here because the panel still redirects that old bookmark on
- * to /admin/login.
+ * Keep this list in sync with the server configs that do the same job in
+ * production — deploy/nginx.conf (the live host), deploy/.htaccess and
+ * public/_redirects. Dev, preview and the deployed site should agree on who
+ * serves what; see deploy/README.md. /login is here because the panel still
+ * redirects that old bookmark on to /admin/login.
  */
 function adminHtmlFallback() {
   const isAdminUrl = (path) =>
