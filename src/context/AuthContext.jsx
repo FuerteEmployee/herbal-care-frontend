@@ -9,18 +9,55 @@ import { setToken, clearSession, SESSION_KEY } from '../api/tokenStore'
 // otherwise-valid session.
 const PROFILE_REFRESH_INTERVAL_MS = 60_000
 
+/**
+ * Has this JWT passed its own expiry?
+ *
+ * Reads the `exp` claim without verifying the signature, which is all that is
+ * wanted here — the server is what decides whether a token is genuine. This
+ * only avoids presenting the panel behind a token that is already dead.
+ *
+ * Unknown shape or no `exp` counts as not-expired: the server still gets the
+ * final say, and refusing to restore a session we simply could not read would
+ * log people out over a parsing quirk.
+ */
+function isTokenExpired(token) {
+  try {
+    const payload = String(token).split('.')[1]
+    if (!payload) return false
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+    const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4)
+    const { exp } = JSON.parse(atob(padded))
+    return typeof exp === 'number' && exp * 1000 <= Date.now()
+  } catch {
+    return false
+  }
+}
+
 // The session (including the JWT) is kept in localStorage, persisting
-// across refreshes and tab closures.
+// across refreshes and tab closures — see api/tokenStore.js, where that is a
+// deliberate choice rather than an accident.
 function readSession() {
   const stored = localStorage.getItem(SESSION_KEY)
   if (!stored) return null
   try {
     const session = JSON.parse(stored)
+
+    // An expired token used to restore a perfectly ordinary-looking session:
+    // isAuthenticated went true, RequireAuth let the route through, and the
+    // panel rendered — until the first request 401'd and the interceptor
+    // bounced it to the login screen. Nothing was ever readable, since the
+    // server rejects the token too, but a dead session should not put the
+    // dashboard on screen at all.
+    if (isTokenExpired(session.token)) {
+      clearSession()
+      return null
+    }
+
     setToken(session.token)
     return session
   } catch {
     // Corrupt payload — start clean rather than crashing the whole app on boot.
-    localStorage.removeItem(SESSION_KEY)
+    clearSession()
     return null
   }
 }

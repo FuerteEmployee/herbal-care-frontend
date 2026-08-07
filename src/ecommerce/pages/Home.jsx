@@ -204,7 +204,7 @@ export default function Home() {
                     <b>₹999</b>
                     <s>₹1,499</s>
                   </span>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className="pcard__actions">
                     <Link to="/kings-man" className="btn btn--outline btn--sm">
                       View
                     </Link>
@@ -237,7 +237,7 @@ export default function Home() {
                     <b>₹1,499</b>
                     <s>₹2,999</s>
                   </span>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className="pcard__actions">
                     <Link to="/kings-man-combo" className="btn btn--outline btn--sm">
                       View
                     </Link>
