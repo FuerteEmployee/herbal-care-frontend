@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, ChevronDown } from 'lucide-react'
+import { LogOut, ChevronDown, Menu } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
-export default function TopBar({ title }) {
+export default function TopBar({ title, onOpenMobileSidebar }) {
   const { user, logout } = useAuth()
   const name = user?.name ?? 'Admin'
   const roleName = user?.roleName ?? 'Admin'
@@ -31,7 +31,19 @@ export default function TopBar({ title }) {
 
   return (
     <header className="topbar">
-
+      {/* Below lg the sidebar is not rendered inline at all — it only exists as
+          an overlay — so without this button there is no navigation on a phone
+          whatsoever. Its visibility is handled by .topbar-menu-btn in index.css
+          rather than a Tailwind `lg:hidden`; see the note there. */}
+      <button
+        type="button"
+        onClick={onOpenMobileSidebar}
+        className="topbar-icon-btn topbar-menu-btn"
+        aria-label="Open menu"
+        title="Menu"
+      >
+        <Menu size={18} />
+      </button>
 
       {/* Page title */}
       <h1 className="topbar-title">{title}</h1>
@@ -42,7 +54,7 @@ export default function TopBar({ title }) {
         {/* Profile */}
         <div ref={profileRef} style={{ position: 'relative' }}>
           <button
-            onClick={() => { setProfileOpen((v) => !v); setNotifOpen(false) }}
+            onClick={() => setProfileOpen((v) => !v)}
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
               background: 'none', border: 'none', cursor: 'pointer', padding: '4px 0',

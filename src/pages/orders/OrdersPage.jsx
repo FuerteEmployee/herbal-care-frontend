@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
-  Search, Filter, Calendar, User, Truck, Eye, CheckCircle, XCircle, Clock, Package, MapPin, ClipboardList, RotateCcw, X, ShoppingCart,
+  Search, Filter, Calendar, User, Truck, Eye, CheckCircle, XCircle, Clock, Package, MapPin, ClipboardList, RotateCcw, Undo2, X, ShoppingCart,
 } from 'lucide-react'
 import PageHeader from '../../components/ui/PageHeader'
 import Button from '../../components/ui/Button'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
 import { useToast } from '../../components/ui/ToastContext'
 import { usePermission } from '../../hooks/usePermission'
 import TableEmpty from '../../components/ui/TableEmpty'
@@ -16,7 +17,7 @@ import {
   updateOrderStatus,
   ORDER_STATUSES,
   ORDER_STATUS_LABELS,
-  NEXT_STATUSES,
+  STOCK_RETURNED_STATUSES,
 } from '../../api/orders.api'
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50]
@@ -34,6 +35,7 @@ function statusPillClass(status) {
     case 'processing':  return 'pill-blue'
     case 'shipped':     return 'pill-indigo'
     case 'delivered':   return 'pill-green'
+    case 'returned':    return 'pill-amber'
     case 'cancelled':   return 'pill-red'
     default:            return 'pill-slate'
   }
@@ -59,12 +61,51 @@ function formatDate(value) {
   return `${dd}-${mm}-${yyyy}`
 }
 
-// The icon offered for advancing an order, per target status.
-const ACTION_ICON = {
-  processing: Package,
-  shipped: Truck,
-  delivered: CheckCircle,
-  cancelled: XCircle,
+/*
+ * Which statuses an order may be moved to: all of them, minus the one it is
+ * already in.
+ *
+ * There is no transition graph on purpose. The old icon row offered only the
+ * single next step, and Delivered and Cancelled offered nothing at all — so an
+ * order wrongly marked Delivered was stuck there, and the only way back was
+ * editing the database. Correcting a mistake is part of what this screen is
+ * for, and the server keeps stock and payment consistent wherever the order
+ * lands, so nothing here needs to police the route it took.
+ */
+function statusOptions(current) {
+  return ORDER_STATUSES.filter((s) => s !== current)
+}
+
+/**
+ * What the admin is about to cause, in words.
+ *
+ * A status change is not only a label: entering Cancelled or Returned puts the
+ * items back on the shelf, and leaving one takes them off again. Someone
+ * correcting a mis-click deserves to know that before they confirm, not after
+ * they notice the stock count moved.
+ */
+function statusChangeMessage({ order, status }) {
+  const from = ORDER_STATUS_LABELS[order.status] ?? order.status
+  const to = ORDER_STATUS_LABELS[status]
+  const lines = [`Order ${order.orderRef} moves from ${from} to ${to}.`]
+
+  const wasReturned = STOCK_RETURNED_STATUSES.includes(order.status)
+  const willReturn = STOCK_RETURNED_STATUSES.includes(status)
+  if (!wasReturned && willReturn) {
+    lines.push('The items go back into stock.')
+  } else if (wasReturned && !willReturn) {
+    lines.push('The items come back out of stock, as if the order were placed again.')
+  }
+
+  if (order.paymentMethod === 'cod') {
+    if (status === 'delivered' && order.paymentStatus !== 'paid') {
+      lines.push('Cash on delivery, so the order is marked paid.')
+    } else if (order.status === 'delivered' && status !== 'returned' && order.paymentStatus === 'paid') {
+      lines.push('Cash on delivery, so payment goes back to pending.')
+    }
+  }
+
+  return lines.join(' ')
 }
 
 export default function OrdersPage() {
@@ -87,6 +128,8 @@ export default function OrdersPage() {
   const [toDate, setToDate] = useState('')
 
   const [selectedOrder, setSelectedOrder] = useState(null)
+  // { order, status } while the confirmation for a status change is open.
+  const [pendingStatus, setPendingStatus] = useState(null)
 
   // Every filter goes to the server. Nothing below narrows the rows again in
   // the browser: with orders in the lakhs, "search" that only looks at the ten
@@ -133,13 +176,30 @@ export default function OrdersPage() {
     setPage(1)
   }, [filterKey, pageSize])
 
-  async function handleStatusChange(order, nextStatus) {
+  /**
+   * Asks first.
+   *
+   * A status change is undoable now, but it is not free: entering or leaving
+   * Cancelled/Returned moves stock, and a COD order's payment follows its
+   * delivery. Confirming is what keeps a stray tap on the badge from quietly
+   * doing all that. Both the table and the detail drawer come through here, so
+   * neither can change an order in one click.
+   */
+  function handleStatusChange(order, nextStatus) {
+    if (!nextStatus || nextStatus === order.status) return
+    setPendingStatus({ order, status: nextStatus })
+  }
+
+  async function applyStatusChange() {
+    if (!pendingStatus) return
+    const { order, status } = pendingStatus
+    setPendingStatus(null)
     setBusyId(order.id)
     try {
-      const updated = await updateOrderStatus(order.id, nextStatus)
+      const updated = await updateOrderStatus(order.id, status)
       setOrders((prev) => prev.map((o) => (o.id === order.id ? updated : o)))
       if (selectedOrder?.id === order.id) setSelectedOrder(updated)
-      showToast(`${updated.orderRef} → ${ORDER_STATUS_LABELS[nextStatus]}`, 'success')
+      showToast(`${updated.orderRef} → ${ORDER_STATUS_LABELS[status]}`, 'success')
     } catch (err) {
       showToast(err.message, 'error')
     } finally {
@@ -256,7 +316,7 @@ export default function OrdersPage() {
                 <th className="tbl-right">Total</th>
                 <th className="tbl-center" style={{ width: '110px' }}>Payment</th>
                 <th className="tbl-center" style={{ width: '110px' }}>Pay Type</th>
-                <th className="tbl-center" style={{ width: '110px' }}>Status</th>
+                <th className="tbl-center" style={{ width: '150px' }}>Status</th>
                 <th className="tbl-right col-actions">Actions</th>
               </tr>
             </thead>
@@ -304,33 +364,41 @@ export default function OrdersPage() {
                     <td className="tbl-center">
                       <span className="pill pill-slate">{ord.paymentMethod.toUpperCase()}</span>
                     </td>
+                    {/* The badge itself is the control: it shows the status and
+                        changes it, so there is no second column repeating the
+                        same value. Every status is offered from every status, so
+                        an order marked Delivered by mistake goes straight back
+                        to Processing.
+                        `value` stays bound to the order's real status and
+                        nothing is written until the confirmation is accepted —
+                        so dismissing the dialog re-renders the badge back to
+                        where it was, with no local state to keep in step. */}
                     <td className="tbl-center">
-                      <span className={`pill ${statusPillClass(ord.status)}`}>
-                        {ORDER_STATUS_LABELS[ord.status] ?? ord.status}
-                      </span>
+                      {can('orders.edit') ? (
+                        <select
+                          className={`order-status-select order-status-${ord.status}`}
+                          value={ord.status}
+                          disabled={busyId === ord.id}
+                          aria-label={`Status of ${ord.orderRef}`}
+                          onChange={(e) => handleStatusChange(ord, e.target.value)}
+                        >
+                          {ORDER_STATUSES.map((s) => (
+                            <option key={s} value={s}>
+                              {ORDER_STATUS_LABELS[s]}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className={`pill ${statusPillClass(ord.status)}`}>
+                          {ORDER_STATUS_LABELS[ord.status] ?? ord.status}
+                        </span>
+                      )}
                     </td>
                     <td>
                       <div className="tbl-actions">
                         <button className="row-action" onClick={() => setSelectedOrder(ord)} title="View details">
                           <Eye size={15} />
                         </button>
-                        {/* Only transitions the server accepts are offered, and
-                            only to a role allowed to change an order. */}
-                        {can('orders.edit') && (NEXT_STATUSES[ord.status] ?? []).map((next) => {
-                          const Icon = ACTION_ICON[next] ?? CheckCircle
-                          const danger = next === 'cancelled'
-                          return (
-                            <button
-                              key={next}
-                              className={`row-action ${danger ? 'row-action-red' : 'row-action-green'}`}
-                              disabled={busyId === ord.id}
-                              onClick={() => handleStatusChange(ord, next)}
-                              title={`Mark ${ORDER_STATUS_LABELS[next]}`}
-                            >
-                              <Icon size={15} />
-                            </button>
-                          )
-                        })}
                       </div>
                     </td>
                   </tr>
@@ -362,6 +430,24 @@ export default function OrdersPage() {
           onStatusChange={handleStatusChange}
         />
       )}
+
+      {/* Nothing is written until this is accepted, so a stray tap on the
+          dropdown — or in the drawer — costs one dismissal rather than a status
+          change. Every move is reversible now, but stock moves with it, so the
+          message spells out what else happens. */}
+      <ConfirmDialog
+        open={!!pendingStatus}
+        onClose={() => setPendingStatus(null)}
+        onConfirm={applyStatusChange}
+        title={`Mark ${ORDER_STATUS_LABELS[pendingStatus?.status] ?? ''}?`}
+        message={pendingStatus ? statusChangeMessage(pendingStatus) : ''}
+        confirmLabel={`Mark ${ORDER_STATUS_LABELS[pendingStatus?.status] ?? ''}`}
+        tone={
+          pendingStatus && STOCK_RETURNED_STATUSES.includes(pendingStatus.status)
+            ? 'danger'
+            : 'primary'
+        }
+      />
     </div>
   )
 }
@@ -398,11 +484,12 @@ function OrderSummary({ filterKey }) {
     { key: 'processing', label: 'Processing', icon: Package, bg: '#eff5fe', fg: '#1d4ed8' },
     { key: 'shipped', label: 'Shipped', icon: Truck, bg: '#f1f2fe', fg: '#4338ca' },
     { key: 'delivered', label: 'Delivered', icon: CheckCircle, bg: '#edfaf0', fg: '#15803d' },
+    { key: 'returned', label: 'Returned', icon: Undo2, bg: '#fdf6e3', fg: '#b45309' },
     { key: 'cancelled', label: 'Cancelled', icon: XCircle, bg: '#fdf1f1', fg: '#b91c1c' },
   ]
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
       {TILES.map(({ key, label, icon: Icon, bg, fg }) => (
         <div key={key} className="mini-stat">
           <div className="mini-stat-icon" style={{ background: bg, color: fg }}>
@@ -566,18 +653,26 @@ function OrderDetailDrawer({ order, busy, onClose, onStatusChange }) {
           )}
         </div>
 
-        {can('orders.edit') && (NEXT_STATUSES[order.status] ?? []).length > 0 && (
+        {/* Same option list as the table's dropdown, and the same confirmation
+            behind it — onStatusChange only opens the dialog. */}
+        {can('orders.edit') && (
           <div className="drawer-footer">
-            {(NEXT_STATUSES[order.status] ?? []).map((next) => (
-              <Button
-                key={next}
-                variant={next === 'cancelled' ? 'danger' : 'primary'}
+            <label className="drawer-status">
+              <span>Update status</span>
+              <select
+                className="filter-select"
+                value=""
                 disabled={busy}
-                onClick={() => onStatusChange(order, next)}
+                onChange={(e) => onStatusChange(order, e.target.value)}
               >
-                Mark {ORDER_STATUS_LABELS[next]}
-              </Button>
-            ))}
+                <option value="">Choose…</option>
+                {statusOptions(order.status).map((next) => (
+                  <option key={next} value={next}>
+                    {ORDER_STATUS_LABELS[next]}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
         )}
       </div>

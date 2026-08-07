@@ -5,25 +5,28 @@ import { api } from './httpClient'
 // embedded shippingAddress. Status changes go through one endpoint —
 // PUT /api/orders/:id/status — which also restores stock when cancelling.
 
-export const ORDER_STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
+export const ORDER_STATUSES = [
+  'pending',
+  'processing',
+  'shipped',
+  'delivered',
+  'returned',
+  'cancelled',
+]
 
 export const ORDER_STATUS_LABELS = {
   pending: 'Pending',
   processing: 'Processing',
   shipped: 'Shipped',
   delivered: 'Delivered',
+  returned: 'Returned',
   cancelled: 'Cancelled',
 }
 
-// Which statuses an order may move to next. Drives the row actions so the UI
-// never offers a transition the server would reject.
-export const NEXT_STATUSES = {
-  pending: ['processing', 'cancelled'],
-  processing: ['shipped', 'cancelled'],
-  shipped: ['delivered', 'cancelled'],
-  delivered: [],
-  cancelled: [],
-}
+// Statuses in which the goods are back on the shelf — the server puts stock
+// back when an order enters one of these and takes it off again when it leaves.
+// Mirrored here only so the confirmation dialog can say what will happen.
+export const STOCK_RETURNED_STATUSES = ['cancelled', 'returned']
 
 export function mapOrderFromApi(o) {
   const items = (o.items ?? []).map((i) => ({
