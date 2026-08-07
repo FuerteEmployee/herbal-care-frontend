@@ -9,6 +9,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/png" href="/site-favicon.png" />
     <title>Herbal Gujarat | Herbal King's Man</title>
+    <script>
+      /*
+       * Hand /admin/* over to the panel's document.
+       *
+       * The storefront and the admin panel are separate HTML documents (see
+       * vite.config.js). Routing them is the server's job — deploy/nginx.conf
+       * maps /admin/* to admin.html — but when that rule is missing, the host's
+       * generic SPA fallback answers /admin/login with *this* document, and the
+       * storefront router has no /admin route, so the visitor gets "page not
+       * found" with a 200 status.
+       *
+       * This is the safety net for that case: it works on any host that falls
+       * back to index.html, with no server configuration at all. Where the
+       * server rule *is* in place this never runs, because index.html is never
+       * served for an /admin URL — the two do not conflict.
+       *
+       * Inline and synchronous on purpose: it has to decide before the deferred
+       * module below starts booting the storefront.
+       */
+      (function redirectAdminRoutes() {
+        // /admin, /admin/anything and the old /login bookmark — but not
+        // /admin.html itself, which would loop, and not /administrator.
+        if (!/^\/(admin|login)(\/|$)/.test(location.pathname)) return;
+        try {
+          // Remembered so the panel can restore the URL the visitor asked for
+          // rather than dropping them on its default page.
+          sessionStorage.setItem(
+            'hg_admin_route',
+            location.pathname + location.search + location.hash,
+          );
+        } catch (err) {
+          /* private mode — the panel still opens, just at its default page */
+        }
+        // replace(), not assign(): the broken URL should not be a back-button stop.
+        location.replace('/admin.html');
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

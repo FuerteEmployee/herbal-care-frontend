@@ -42,6 +42,23 @@ the storefront was served and routing is not configured.
 — on the current server it is being served as a public download, which the
 configs here also close off.
 
+## The client-side safety net
+
+`index.html` carries a small inline script that hands `/admin/*` over to
+`admin.html`, and `admin.html` carries one that restores the requested URL. Together
+they make deep links work on **any** host whose fallback is `index.html`, with no
+server configuration at all — which is what keeps the panel reachable when the
+config above has not been applied yet.
+
+It is a fallback, not the fix. It costs an extra document load and a brief flash
+of the storefront before the panel takes over. Configure the server and the
+scripts stop running entirely: `index.html` is never served for an `/admin` URL,
+so the handoff never triggers and the restore finds nothing to restore. The two
+do not conflict, so the scripts can stay.
+
+If you remove them, `/admin/*` breaks the moment the server config is missing —
+which is the state the site shipped in.
+
 ## Rules
 
 Whatever the host, the rules are the same and the order matters:

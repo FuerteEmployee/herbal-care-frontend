@@ -16,6 +16,30 @@
     <meta name="description" content="Herbal Gujarat Admin Panel — manage products, orders, leads, purchases, and deliveries." />
     <meta name="robots" content="noindex, nofollow" />
     <title>Herbal Gujarat Admin</title>
+    <script>
+      /*
+       * Put the URL back after index.html handed us a deep link — see the
+       * matching script there for why that handoff exists.
+       *
+       * Without this the panel would boot at /admin.html, which matches no
+       * route, and the router's catch-all would send every deep link to the
+       * dashboard. Runs before /src/main.jsx, which is a module and therefore
+       * deferred, so the router reads the corrected location on its first
+       * render and no redirect is ever visible.
+       */
+      (function restoreAdminRoute() {
+        try {
+          var route = sessionStorage.getItem('hg_admin_route');
+          if (!route) return;
+          // Cleared immediately: it applies to this navigation only, otherwise
+          // opening the panel again later would jump to a stale URL.
+          sessionStorage.removeItem('hg_admin_route');
+          history.replaceState(null, '', route);
+        } catch (err) {
+          /* nothing handed over — the panel opens at its default page */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
