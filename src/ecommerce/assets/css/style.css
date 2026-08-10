@@ -98,6 +98,42 @@ body {
   color: var(--body);
   background: var(--cream);
   overflow-x: hidden;
+  /* Casual-copy deterrent — the CSS half of lib/contentProtection.js, which
+     carries the full reasoning and its limits. Selection is off by default and
+     switched back on below wherever it is actually needed.
+     -webkit-touch-callout is the mobile half of the same idea: without it, a
+     long press on iOS offers "Save Image" and "Copy" no matter what the
+     contextmenu handler does. */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Selection stays on where turning it off would break something real:
+   - form fields, so checkout and the contact form behave normally
+   - .allow-select, for content the visitor has to take away with them
+     (the order reference, phone numbers, the email address)
+   The descendant selector matters — .allow-select is usually a wrapper. */
+input,
+textarea,
+select,
+[contenteditable="true"],
+.allow-select,
+.allow-select * {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* Images: no drag-to-desktop, no long-press save sheet. Deliberately no
+   pointer-events change — the product images sit inside links, and disabling
+   pointer events would stop those cards being clickable. */
+img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 img { max-width: 100%; display: block; height: auto; }
 a { color: inherit; text-decoration: none; }

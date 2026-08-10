@@ -83,14 +83,14 @@ export default function Footer({ variant = 'full' }) {
                 <svg viewBox="0 0 24 24">
                   <path d="M4 5.5C4 4.7 4.7 4 5.5 4h2.2c.7 0 1.3.5 1.5 1.2l.7 3c.1.6-.1 1.2-.6 1.5l-1.4 1a11 11 0 004.4 4.4l1-1.4c.4-.5 1-.7 1.5-.6l3 .7c.7.2 1.2.8 1.2 1.5v2.2c0 .8-.7 1.5-1.5 1.5A15.5 15.5 0 014 5.5z" />
                 </svg>
-                <a href="tel:+918469057530">+91 84690 57530</a>
+                <a className="allow-select" href="tel:+918469057530">+91 84690 57530</a>
               </li>
               <li>
                 <svg viewBox="0 0 24 24">
                   <rect x="3" y="5" width="18" height="14" rx="2" />
                   <path d="M3.5 6.5L12 12.5l8.5-6" />
                 </svg>
-                <a href="mailto:info@herbalgujratcare.com">info@herbalgujratcare.com</a>
+                <a className="allow-select" href="mailto:info@herbalgujratcare.com">info@herbalgujratcare.com</a>
               </li>
             </ul>
           </div>

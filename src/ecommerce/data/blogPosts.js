@@ -7,9 +7,12 @@ import hero1Image from '../assets/img/hero-1.png';
 
 /**
  * Metadata for the blog listing and every post's "related articles" grid.
- * Two entries (read-supplement-label, sleep-diet-stamina) have no matching
- * route — blog.html links to pages that were never built, and this carries
- * that pre-existing gap forward rather than silently dropping the cards.
+ *
+ * This list also drives the routes: App.jsx maps each entry to a page through
+ * BLOG_PAGES, so adding a post here without adding its page there is caught in
+ * development instead of shipping a card whose link 404s — which is what
+ * happened to read-supplement-label and sleep-diet-stamina, inherited from the
+ * old blog.html and only noticed when someone clicked.
  */
 export const BLOG_POSTS = [
   {

@@ -506,7 +506,10 @@ export default function Checkout() {
               <div className="success__tick">✓</div>
               <h2>Order Placed Successfully</h2>
               <p>Thank you! Our wellness advisor will call you within 24 hours to confirm the delivery details.</p>
-              <div className="success__id">{doneOrder.ref}</div>
+              {/* allow-select: this reference is shown once and then has to be
+                  typed back into the tracking form. Blocking copy here protects
+                  nothing and just makes a paying customer transcribe it. */}
+              <div className="success__id allow-select">{doneOrder.ref}</div>
               {!user && (
                 <p className="form__note" style={{ marginTop: -14, marginBottom: 22 }}>
                   Note this order ID down — you can track the order with it and your mobile number any time, no account

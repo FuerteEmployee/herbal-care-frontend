@@ -42,7 +42,7 @@ export default function Contact() {
               </div>
               <h3>Call Us</h3>
               <p>
-                <a href="tel:+918469057530">+91 84690 57530</a>
+                <a className="allow-select" href="tel:+918469057530">+91 84690 57530</a>
               </p>
             </article>
 
@@ -55,7 +55,7 @@ export default function Contact() {
               </div>
               <h3>Email Us</h3>
               <p>
-                <a href="mailto:info@herbalgujratcare.com">info@herbalgujratcare.com</a>
+                <a className="allow-select" href="mailto:info@herbalgujratcare.com">info@herbalgujratcare.com</a>
               </p>
             </article>
           </div>
