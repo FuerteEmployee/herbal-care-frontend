@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { api } from '../../api/httpClient';
+import { sendEnquiry } from '../lib/api.js';
 
 /**
  * Shared shell for every `data-enquiry`-style form (Home, Contact, and both
@@ -63,7 +63,7 @@ export default function EnquiryForm({ children, source = 'General', className = 
       // Format subject
       const subject = pack ? `Order Callback` : (formData.get('subject')?.toString() || 'General Enquiry');
 
-      await api.post('/contact', {
+      await sendEnquiry({
         name,
         email: email ? email.trim().toLowerCase() : undefined,
         phone: phone ? phone.trim() : undefined,

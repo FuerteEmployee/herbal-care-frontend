@@ -8,13 +8,11 @@ import { useSlider } from '../hooks/useSlider.js';
 import { useRevealOnMount } from '../hooks/useRevealOnMount.js';
 import bottleImage from '../assets/img/bottle-front.webp';
 import comboImage from '../assets/img/combo-front.webp';
-import heroImageOne from '../assets/img/hero-1.webp';
-import heroImageTwo from '../assets/img/hero-2.webp';
-import heroImageThree from '../assets/img/hero-3.webp';
 
 const HERO_SLIDES = [
   {
-    image: heroImageOne,
+    image: '/hero-1.webp',
+    imageMobile: '/hero-1-mobile.webp',
     gradient: 'linear-gradient(120deg,#232a1f,#46523c 60%,#232a1f)',
     eyebrow: 'Start Every Day With Confidence',
     heading: (
@@ -27,7 +25,8 @@ const HERO_SLIDES = [
     secondaryCta: { to: '/#products', label: 'Explore Products' },
   },
   {
-    image: heroImageTwo,
+    image: '/hero-2.webp',
+    imageMobile: '/hero-2-mobile.webp',
     gradient: 'linear-gradient(120deg,#1b2117,#343d2e 55%,#1b2117)',
     eyebrow: "Naturally Support Men's Wellness",
     heading: (
@@ -40,7 +39,8 @@ const HERO_SLIDES = [
     secondaryCta: { to: '/#ingredients', label: 'See Ingredients' },
   },
   {
-    image: heroImageThree,
+    image: '/hero-3.webp',
+    imageMobile: '/hero-3-mobile.webp',
     gradient: 'linear-gradient(120deg,#241d10,#343d2e 55%,#1b2117)',
     eyebrow: '🎉 Limited Time Offer',
     heading: (
@@ -98,16 +98,19 @@ export default function Home() {
                 className="slide__bg"
                 style={{ backgroundImage: `url(${slide.image}),${slide.gradient}` }}
               >
-                <img
-                  src={slide.image}
-                  alt="Herbal King's Man Ayurvedic Wellness"
-                  fetchpriority={index === 0 ? 'high' : 'low'}
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                  width="1672"
-                  height="941"
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }}
-                />
+                <picture>
+                  <source media="(max-width: 768px)" srcSet={slide.imageMobile} type="image/webp" />
+                  <img
+                    src={slide.image}
+                    alt="Herbal King's Man Ayurvedic Wellness"
+                    fetchpriority={index === 0 ? 'high' : 'low'}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    width="1672"
+                    height="941"
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }}
+                  />
+                </picture>
               </div>
               <div className="slide__in">
                 <div className="wrap">

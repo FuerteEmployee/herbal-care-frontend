@@ -58,10 +58,33 @@ export default defineConfig({
   plugins: [react(), adminHtmlFallback()],
   server: { port: 5173, strictPort: true },
   build: {
+    target: 'es2022',
+    cssCodeSplit: true,
     rollupOptions: {
       input: {
         main: resolve(root, HTML.main),
         admin: resolve(root, HTML.admin),
+      },
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (
+              id.includes('recharts') ||
+              id.includes('bwip-js') ||
+              id.includes('xlsx') ||
+              id.includes('socket.io-client') ||
+              id.includes('lucide-react') ||
+              id.includes('react-hook-form') ||
+              id.includes('zod') ||
+              id.includes('@hookform')
+            ) {
+              return 'admin-vendor';
+            }
+            if (id.includes('react-router') || id.includes('react-dom') || id.includes('react')) {
+              return 'framework';
+            }
+          }
+        },
       },
     },
   },

@@ -280,3 +280,15 @@ export async function cancelOrder(id) {
   if (!res.ok) return res;
   return { ok: true, order: mapOrder(res.data.order) };
 }
+
+export async function sendEnquiry({ name, email, phone, subject, message, source }) {
+  const res = await request('/contact', {
+    method: 'POST',
+    body: { name, email, phone, subject, message, source },
+  });
+  if (!res.ok) {
+    throw new Error(res.error || 'Could not save your enquiry. Please check your network and try again.');
+  }
+  return res;
+}
+

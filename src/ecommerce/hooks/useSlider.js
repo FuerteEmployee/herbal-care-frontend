@@ -30,7 +30,7 @@ export function useSlider(count, intervalMs, { pauseOnHover = false } = {}) {
       if (!pausedRef.current) setIndex((i) => (i + 1) % count);
     }, intervalMs);
     return () => window.clearInterval(timer);
-  }, [count, intervalMs, index]);
+  }, [count, intervalMs]);
 
   const sliderProps = {
     ...(pauseOnHover
