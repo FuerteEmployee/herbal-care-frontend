@@ -6,12 +6,11 @@ import Footer from '../components/layout/Footer.jsx';
 import EnquiryForm from '../components/EnquiryForm.jsx';
 import { useSlider } from '../hooks/useSlider.js';
 import { useRevealOnMount } from '../hooks/useRevealOnMount.js';
-import bottleImage from '../assets/img/bottle-front.png';
-import comboImage from '../assets/img/combo-front.png';
-import heroImageOne from '../assets/img/hero-1.png';
-import heroImageTwo from '../assets/img/hero-2.png';
-import heroImageThree from '../assets/img/hero-3.png';
-import ingredientsImage from '../assets/img/ingredients-poster.png';
+import bottleImage from '../assets/img/bottle-front.webp';
+import comboImage from '../assets/img/combo-front.webp';
+import heroImageOne from '../assets/img/hero-1.webp';
+import heroImageTwo from '../assets/img/hero-2.webp';
+import heroImageThree from '../assets/img/hero-3.webp';
 
 const HERO_SLIDES = [
   {
@@ -98,7 +97,18 @@ export default function Home() {
               <div
                 className="slide__bg"
                 style={{ backgroundImage: `url(${slide.image}),${slide.gradient}` }}
-              />
+              >
+                <img
+                  src={slide.image}
+                  alt="Herbal King's Man Ayurvedic Wellness"
+                  fetchpriority={index === 0 ? 'high' : 'low'}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width="1672"
+                  height="941"
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }}
+                />
+              </div>
               <div className="slide__in">
                 <div className="wrap">
                   <div className="slide__body">
@@ -190,7 +200,14 @@ export default function Home() {
             <article className="card reveal">
               <div className="pcard__media">
                 <span className="badge">Bestseller</span>
-                <img src={bottleImage} alt="Herbal King's Man 30 capsules bottle" />
+                <img
+                  src={bottleImage}
+                  alt="Herbal King's Man 30 capsules bottle"
+                  width="800"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="pcard__body">
                 <div className="pcard__meta">30 Capsules · Single Pack</div>
@@ -205,10 +222,10 @@ export default function Home() {
                     <s>₹1,499</s>
                   </span>
                   <div className="pcard__actions">
-                    <Link to="/kings-man" className="btn btn--outline btn--sm">
+                    <Link to="/kings-man" className="btn btn--outline btn--sm" aria-label="View Herbal King's Man single pack details">
                       View
                     </Link>
-                    <Link to="/checkout?pack=single" className="btn btn--gold btn--sm">
+                    <Link to="/checkout?pack=single" className="btn btn--gold btn--sm" aria-label="Buy Herbal King's Man single pack now">
                       Buy Now
                     </Link>
                   </div>
@@ -222,6 +239,10 @@ export default function Home() {
                 <img
                   src={comboImage}
                   alt="Herbal King's Man buy one get one free combo pack"
+                  width="800"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
                   style={{ objectPosition: 'center 30%' }}
                 />
               </div>
@@ -238,10 +259,10 @@ export default function Home() {
                     <s>₹2,999</s>
                   </span>
                   <div className="pcard__actions">
-                    <Link to="/kings-man-combo" className="btn btn--outline btn--sm">
+                    <Link to="/kings-man-combo" className="btn btn--outline btn--sm" aria-label="View King's Man combo pack details">
                       View
                     </Link>
-                    <Link to="/checkout?pack=combo" className="btn btn--gold btn--sm">
+                    <Link to="/checkout?pack=combo" className="btn btn--gold btn--sm" aria-label="Buy King's Man combo pack now">
                       Buy Now
                     </Link>
                   </div>
@@ -297,7 +318,14 @@ export default function Home() {
             </div>
 
             <div className="offer__media reveal">
-              <img src={comboImage} alt="Herbal King's Man combo pack offer — buy one get one free at ₹1499" />
+              <img
+                src={comboImage}
+                alt="Herbal King's Man combo pack offer — buy one get one free at ₹1499"
+                width="800"
+                height="800"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           </div>
         </div>
@@ -307,7 +335,15 @@ export default function Home() {
         <div className="wrap">
           <div className="split">
             <div className="split__media reveal">
-              <img src={bottleImage} alt="Herbal King's Man 30 capsule bottle, front view" className="is-contain" />
+              <img
+                src={bottleImage}
+                alt="Herbal King's Man 30 capsule bottle, front view"
+                className="is-contain"
+                width="800"
+                height="800"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <div className="reveal">
               <span className="eyebrow">Premium Benefits</span>

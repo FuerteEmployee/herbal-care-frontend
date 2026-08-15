@@ -7,10 +7,10 @@ import Footer from '../components/layout/Footer.jsx';
 import PageHead from '../components/layout/PageHead.jsx';
 import EnquiryForm from '../components/EnquiryForm.jsx';
 import { useRevealOnMount } from '../hooks/useRevealOnMount.js';
-import awardImage from '../assets/img/award-poster.png';
-import bottleImage from '../assets/img/bottle-front.png';
-import comboImage from '../assets/img/combo-front.png';
-import ingredientsImage from '../assets/img/ingredients-poster.png';
+import awardImage from '../assets/img/award-poster.webp';
+import bottleImage from '../assets/img/bottle-front.webp';
+import comboImage from '../assets/img/combo-front.webp';
+import ingredientsImage from '../assets/img/ingredients-poster.webp';
 
 const galleryItems = [
   { src: bottleImage, alt: "Herbal King's Man 30 capsule bottle, front view", fit: 'contain' },

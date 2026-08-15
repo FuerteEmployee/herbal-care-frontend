@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import logoImg from '../../assets/img/logo.png';
+import logoImg from '../../assets/img/logo.webp';
 import { useAuth } from '../../context/AuthContext.jsx';
 import LanguageSwitcher from './LanguageSwitcher.jsx';
 
@@ -24,7 +24,7 @@ export default function Header({ showBookNow = true, bookNowHref = '/checkout' }
     <header className="nav">
       <div className="nav__in wrap">
         <Link className="brand" to="/" onClick={closeMenu}>
-          <img src={logoImg} alt="Herbal King's Man" className="brand__logo" />
+          <img src={logoImg} alt="Herbal King's Man" className="brand__logo" width="164" height="52" decoding="async" />
         </Link>
 
         <nav className={`menu${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">

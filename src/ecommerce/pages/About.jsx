@@ -7,8 +7,8 @@ import Footer from '../components/layout/Footer.jsx';
 import PageHead from '../components/layout/PageHead.jsx';
 import CTABanner from '../components/layout/CTABanner.jsx';
 import { useRevealOnMount } from '../hooks/useRevealOnMount.js';
-import bottleImage from '../assets/img/bottle-front.png';
-import awardImage from '../assets/img/award-poster.png';
+import bottleImage from '../assets/img/bottle-front.webp';
+import awardImage from '../assets/img/award-poster.webp';
 
 const VALUES = [
   {

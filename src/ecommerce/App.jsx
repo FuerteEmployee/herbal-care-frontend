@@ -1,35 +1,30 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home.jsx';
-import KingsMan from './pages/KingsMan.jsx';
-import KingsManCombo from './pages/KingsManCombo.jsx';
-import About from './pages/About.jsx';
-import Contact from './pages/Contact.jsx';
-import Checkout from './pages/Checkout.jsx';
-import Account from './pages/Account.jsx';
-import Blog from './pages/Blog.jsx';
-import BlogShilajitDailyEnergy from './pages/BlogShilajitDailyEnergy.jsx';
-import BlogAshwagandhaEverydayStress from './pages/BlogAshwagandhaEverydayStress.jsx';
-import BlogMorningRoutineMen30 from './pages/BlogMorningRoutineMen30.jsx';
-import BlogSafedMusliGokhru from './pages/BlogSafedMusliGokhru.jsx';
-import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
-import TermsConditions from './pages/TermsConditions.jsx';
-import ShippingPolicy from './pages/ShippingPolicy.jsx';
-import NotFound from './pages/NotFound.jsx';
-import BlogReadSupplementLabel from './pages/BlogReadSupplementLabel.jsx';
-import BlogSleepDietStamina from './pages/BlogSleepDietStamina.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import { BLOG_POSTS } from './data/blogPosts.js';
 import { useContentProtection } from './lib/contentProtection.js';
+import { useMetaPixel } from './hooks/useMetaPixel.js';
 
-/*
- * Every post in BLOG_POSTS needs a page here, keyed by slug.
- *
- * The listing and the routes used to be maintained separately, and they drifted:
- * two posts had cards on /blog whose "Read Article" link pointed at a path no
- * <Route> matched, so it fell through to NotFound. Generating the routes from
- * the same list the cards come from means a post can no longer link to nothing.
- */
+// Code-splitting for non-home routes
+const KingsMan = lazy(() => import('./pages/KingsMan.jsx'));
+const KingsManCombo = lazy(() => import('./pages/KingsManCombo.jsx'));
+const About = lazy(() => import('./pages/About.jsx'));
+const Contact = lazy(() => import('./pages/Contact.jsx'));
+const Checkout = lazy(() => import('./pages/Checkout.jsx'));
+const Account = lazy(() => import('./pages/Account.jsx'));
+const Blog = lazy(() => import('./pages/Blog.jsx'));
+const BlogShilajitDailyEnergy = lazy(() => import('./pages/BlogShilajitDailyEnergy.jsx'));
+const BlogAshwagandhaEverydayStress = lazy(() => import('./pages/BlogAshwagandhaEverydayStress.jsx'));
+const BlogMorningRoutineMen30 = lazy(() => import('./pages/BlogMorningRoutineMen30.jsx'));
+const BlogSafedMusliGokhru = lazy(() => import('./pages/BlogSafedMusliGokhru.jsx'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
+const TermsConditions = lazy(() => import('./pages/TermsConditions.jsx'));
+const ShippingPolicy = lazy(() => import('./pages/ShippingPolicy.jsx'));
+const NotFound = lazy(() => import('./pages/NotFound.jsx'));
+const BlogReadSupplementLabel = lazy(() => import('./pages/BlogReadSupplementLabel.jsx'));
+const BlogSleepDietStamina = lazy(() => import('./pages/BlogSleepDietStamina.jsx'));
+
 const BLOG_PAGES = {
   'shilajit-daily-energy': BlogShilajitDailyEnergy,
   'ashwagandha-everyday-stress': BlogAshwagandhaEverydayStress,
@@ -39,8 +34,6 @@ const BLOG_PAGES = {
   'sleep-diet-stamina': BlogSleepDietStamina,
 };
 
-// A post added without a page is a dead card on the blog listing, and nothing
-// about it looks wrong until someone clicks. Say so at boot in development.
 if (import.meta.env.DEV) {
   const orphaned = BLOG_POSTS.filter((post) => !BLOG_PAGES[post.slug]).map((post) => post.slug);
   if (orphaned.length > 0) {
@@ -53,29 +46,31 @@ if (import.meta.env.DEV) {
 
 export default function App() {
   useContentProtection();
+  useMetaPixel();
 
   return (
     <>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/kings-man" element={<KingsMan />} />
-        <Route path="/kings-man-combo" element={<KingsManCombo />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/blog" element={<Blog />} />
-        {/* One route per post, straight from the list the cards are built from. */}
-        {BLOG_POSTS.map((post) => {
-          const Page = BLOG_PAGES[post.slug];
-          return Page ? <Route key={post.slug} path={post.path} element={<Page />} /> : null;
-        })}
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/terms-and-conditions" element={<TermsConditions />} />
-        <Route path="/shipping-policy" element={<ShippingPolicy />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<div style={{ minHeight: '50vh' }} />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/kings-man" element={<KingsMan />} />
+          <Route path="/kings-man-combo" element={<KingsManCombo />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/blog" element={<Blog />} />
+          {BLOG_POSTS.map((post) => {
+            const Page = BLOG_PAGES[post.slug];
+            return Page ? <Route key={post.slug} path={post.path} element={<Page />} /> : null;
+          })}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsConditions />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

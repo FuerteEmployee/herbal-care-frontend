@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../../assets/img/logo.png';
+import logoImg from '../../assets/img/logo.webp';
 
 const QUICK_LINKS_BASE = [
   { to: '/', label: 'Home' },
@@ -18,22 +18,6 @@ const QUICK_LINKS_LAST = {
   account: { to: '/checkout', label: 'Book Now' },
 };
 
-const INFO_LINKS = [
-  { to: '/#ingredients', label: 'Ingredients' },
-  { to: '/kings-man#usage', label: 'How to Use' },
-  { to: '/kings-man#faq', label: 'FAQs' },
-  { to: '/#reviews', label: 'Reviews' },
-  { to: '/contact', label: 'Shipping & COD' },
-];
-
-const ACCOUNT_LINKS = [
-  { to: '/account', label: 'Order History' },
-  { to: '/account', label: 'Track Order' },
-  { to: '/account', label: 'My Reviews' },
-  { to: '/account', label: 'Addresses' },
-  { to: '/account', label: 'Profile' },
-];
-
 const currentYear = new Date().getFullYear();
 
 export default function Footer({ variant = 'full' }) {
@@ -46,7 +30,7 @@ export default function Footer({ variant = 'full' }) {
         <div className="footer__grid">
           <div>
             <Link className="brand" to="/">
-              <img src={logoImg} alt="Herbal King's Man" className="brand__logo" />
+              <img src={logoImg} alt="Herbal King's Man" className="brand__logo" width="164" height="52" loading="lazy" decoding="async" />
             </Link>
             <p style={{ marginTop: 18 }}>
               Premium Ayurvedic wellness products made in India, blending classical herbal traditions with modern
