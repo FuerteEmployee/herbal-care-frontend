@@ -3,8 +3,6 @@
    Brand: deep green #343d2e + antique gold
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
-
 /* The rupee sign (U+20B9) lives in Outfit's latin-ext subset, not its latin
    one. Declaring it as its own single-character family lets us put 'Rupee'
    first in every stack below: a font-family list is consulted per character,
