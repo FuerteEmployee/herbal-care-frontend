@@ -152,6 +152,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ---------- layout helpers ---------- */
 .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 22px; }
 .section { padding: clamp(56px, 8vw, 104px) 0; }
+#products, #offer, #benefits, #ingredients, #reviews, #testimonials, #inquiry, .footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
+}
 .section--cream { background: var(--cream-2); }
 .section--green { background: var(--green); }
 .section--green h2, .section--green h3 { color: var(--white); }

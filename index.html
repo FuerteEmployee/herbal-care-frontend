@@ -2,46 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Herbal Gujarat premium Ayurvedic wellness formula for modern men." />
+
+    <!-- Priority Preconnects & Image Preloads for LCP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+
+    <link rel="preload" href="/hero-1-mobile.webp" as="image" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
+    <link rel="preload" href="/hero-1.webp" as="image" type="image/webp" media="(min-width: 769px)" fetchpriority="high" />
+
+    <!-- Fonts -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" /></noscript>
+
+    <link rel="icon" type="image/png" href="/site-favicon.png" />
+    <title>Herbal Gujarat | Herbal King's Man</title>
+
     <script>
       /*
        * Hand /admin/* over to the panel's document.
-       *
-       * The storefront and the admin panel are separate HTML documents (see
-       * vite.config.js). Routing them is the server's job — deploy/nginx.conf
-       * maps /admin/* to admin.html — but when that rule is missing, the host's
-       * generic SPA fallback answers /admin/login with *this* document, and the
-       * storefront router has no /admin route, so the visitor gets "page not
-       * found" with a 200 status.
-       *
-       * This is the safety net for that case: it works on any host that falls
-       * back to index.html, with no server configuration at all. Where the
-       * server rule *is* in place this never runs, because index.html is never
-       * served for an /admin URL — the two do not conflict.
-       *
-       * Inline and synchronous on purpose: it has to decide before the deferred
-       * module below starts booting the storefront.
        */
       (function redirectAdminRoutes() {
-        // /admin, /admin/anything and the old /login bookmark — but not
-        // /admin.html itself, which would loop, and not /administrator.
         if (!/^\/(admin|login)(\/|$)/.test(location.pathname)) return;
         try {
-          // Remembered so the panel can restore the URL the visitor asked for
-          // rather than dropping them on its default page.
           sessionStorage.setItem(
             'hg_admin_route',
             location.pathname + location.search + location.hash,
           );
-        } catch (err) {
-          /* private mode — the panel still opens, just at its default page */
-        }
-        // replace(), not assign(): the broken URL should not be a back-button stop.
+        } catch (err) {}
         location.replace('/admin.html');
       })();
     </script>
-
-    <link rel="preload" href="/hero-1-mobile.webp" as="image" type="image/webp" media="(max-width: 768px)" fetchpriority="high" />
-    <link rel="preload" href="/hero-1.webp" as="image" type="image/webp" media="(min-width: 769px)" fetchpriority="high" />
 
     <!-- Meta Pixel Code -->
     <script>
@@ -65,18 +60,6 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-NG23DPXD');</script>
     <!-- End Google Tag Manager -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Herbal Gujarat premium Ayurvedic wellness formula for modern men." />
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Jost:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" /></noscript>
-    <link rel="icon" type="image/png" href="/site-favicon.png" />
-    <title>Herbal Gujarat | Herbal King's Man</title>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
