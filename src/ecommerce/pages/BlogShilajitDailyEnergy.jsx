@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogPostLayout from '../components/BlogPostLayout.jsx';
 import { getRelatedPosts } from '../data/blogPosts.js';
-import ingredientsImage from '../assets/img/ingredients-poster.png';
+import ingredientsImage from '../assets/img/ingredients-poster.webp';
 
 export default function BlogShilajitDailyEnergy() {
   return (

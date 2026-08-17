@@ -1,9 +1,9 @@
-import ingredientsImage from '../assets/img/ingredients-poster.png';
-import hero2Image from '../assets/img/hero-2.png';
-import lifestyleImage from '../assets/img/lifestyle-1.png';
-import hero3Image from '../assets/img/hero-3.png';
-import awardImage from '../assets/img/award-poster.png';
-import hero1Image from '../assets/img/hero-1.png';
+import ingredientsImage from '../assets/img/ingredients-poster.webp';
+import hero2Image from '../assets/img/hero-2.webp';
+import lifestyleImage from '../assets/img/lifestyle-1.webp';
+import hero3Image from '../assets/img/hero-3.webp';
+import awardImage from '../assets/img/award-poster.webp';
+import hero1Image from '../assets/img/hero-1.webp';
 
 /**
  * Metadata for the blog listing and every post's "related articles" grid.

@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogPostLayout from '../components/BlogPostLayout.jsx';
 import { getRelatedPosts } from '../data/blogPosts.js';
-import hero1Image from '../assets/img/hero-1.png';
+import hero1Image from '../assets/img/hero-1.webp';
 
 export default function BlogSleepDietStamina() {
   return (

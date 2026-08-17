@@ -3,8 +3,15 @@ import { useEffect } from 'react';
 /**
  * Port of main.js's scroll-reveal behavior: any `.reveal` element inside the
  * given ref gets `.is-in` added once it scrolls into view (one-shot).
+ *
+ * `deps` is only for callers that mount some of their `.reveal` content after
+ * their own first render (Home defers everything below the hero to keep the
+ * very first paint cheap — see Home.jsx) — the effect re-queries `.reveal`
+ * and re-observes whenever one of these changes, so elements that didn't
+ * exist yet on the first pass still get picked up. Every other caller mounts
+ * all of its `.reveal` elements upfront and can leave this at its default.
  */
-export function useRevealOnMount(rootRef) {
+export function useRevealOnMount(rootRef, deps = []) {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return undefined;
@@ -29,5 +36,6 @@ export function useRevealOnMount(rootRef) {
 
     revealItems.forEach((item) => observer.observe(item));
     return () => observer.disconnect();
-  }, [rootRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rootRef, ...deps]);
 }

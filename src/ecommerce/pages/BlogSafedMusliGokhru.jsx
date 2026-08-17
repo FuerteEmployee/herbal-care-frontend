@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogPostLayout from '../components/BlogPostLayout.jsx';
 import { getRelatedPosts } from '../data/blogPosts.js';
-import hero3Image from '../assets/img/hero-3.png';
+import hero3Image from '../assets/img/hero-3.webp';
 
 export default function BlogSafedMusliGokhru() {
   return (

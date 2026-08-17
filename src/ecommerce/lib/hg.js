@@ -11,8 +11,8 @@
  * Order and review records are tagged with the signed-in customer's server id
  * (or null for a guest), so they line up with the account once orders do move.
  */
-import comboImage from '../assets/img/combo-offer.png';
-import bottleImage from '../assets/img/bottle-front.png';
+import comboImage from '../assets/img/combo-offer.webp';
+import bottleImage from '../assets/img/bottle-front.webp';
 
 const K = {
   reviews: 'hg_reviews',

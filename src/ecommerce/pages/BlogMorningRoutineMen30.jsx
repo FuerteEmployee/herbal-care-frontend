@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogPostLayout from '../components/BlogPostLayout.jsx';
 import { getRelatedPosts } from '../data/blogPosts.js';
-import lifestyleImage from '../assets/img/lifestyle-1.png';
+import lifestyleImage from '../assets/img/lifestyle-1.webp';
 
 export default function BlogMorningRoutineMen30() {
   return (

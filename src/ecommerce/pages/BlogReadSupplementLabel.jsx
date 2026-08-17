@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogPostLayout from '../components/BlogPostLayout.jsx';
 import { getRelatedPosts } from '../data/blogPosts.js';
-import awardImage from '../assets/img/award-poster.png';
+import awardImage from '../assets/img/award-poster.webp';
 
 export default function BlogReadSupplementLabel() {
   return (

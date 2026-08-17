@@ -152,10 +152,24 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ---------- layout helpers ---------- */
 .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 22px; }
 .section { padding: clamp(56px, 8vw, 104px) 0; }
-#products, #offer, #benefits, #ingredients, #reviews, #testimonials, #inquiry, .footer {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 500px;
-}
+/* `auto` (not a bare length) makes the browser remember each section's real
+   rendered height the first time it's laid out, so only the very first pass
+   at each section relies on the fallback number after the colon — every later
+   scroll past it reuses the true size instead of jumping back to a flat
+   guess. The fallbacks themselves are real measurements (mobile viewport,
+   `document.querySelectorAll` + `getBoundingClientRect` against the built
+   preview) — a single flat 500px was previously used for all of them, which
+   under- or over-shot most by 2x and caused a real, if Lighthouse-invisible,
+   jump for anyone actually scrolling the page (the lab CLS audit never
+   scrolls, so it never caught this). */
+#products { content-visibility: auto; contain-intrinsic-size: auto 1600px; }
+#offer { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+#benefits { content-visibility: auto; contain-intrinsic-size: auto 1000px; }
+#ingredients { content-visibility: auto; contain-intrinsic-size: auto 1250px; }
+#reviews { content-visibility: auto; contain-intrinsic-size: auto 1200px; }
+#testimonials { content-visibility: auto; contain-intrinsic-size: auto 550px; }
+#inquiry { content-visibility: auto; contain-intrinsic-size: auto 1400px; }
+.footer { content-visibility: auto; contain-intrinsic-size: auto 800px; }
 .section--cream { background: var(--cream-2); }
 .section--green { background: var(--green); }
 .section--green h2, .section--green h3 { color: var(--white); }
@@ -499,13 +513,30 @@ ul { margin: 0; padding: 0; list-style: none; }
   gap: 10px;
 }
 .hero__dots button {
+  position: relative;
   width: 34px; height: 3px;
   border-radius: 3px;
   background: rgba(255, 255, 255, .3);
-  transition: background .3s, transform .3s;
+  transition: transform .3s;
   transform-origin: center;
 }
-.hero__dots button.is-active { background: var(--gold); transform: scaleX(1.588); }
+/* Color swap is done as an opacity crossfade on a layered pseudo-element
+   instead of transitioning `background` directly — background-color is not a
+   compositor-friendly property, and this element repaints every 6s as the
+   hero autoplays, which Lighthouse flags as a non-composited animation. An
+   opacity transition on ::after produces the same visible fade entirely on
+   the compositor thread. */
+.hero__dots button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.hero__dots button.is-active { transform: scaleX(1.588); }
+.hero__dots button.is-active::after { opacity: 1; }
 
 /* ---------- trust strip ---------- */
 .trust { background: var(--green); border-top: 1px solid rgba(230, 201, 118, .18); }
@@ -805,12 +836,26 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .tslider__dots { display: flex; justify-content: center; gap: 10px; margin-top: 30px; }
 .tslider__dots button {
+  position: relative;
   width: 10px; height: 10px;
   border-radius: 50%;
   background: rgba(255, 255, 255, .26);
-  transition: background .3s, transform .3s;
+  transition: transform .3s;
 }
-.tslider__dots button.is-active { background: var(--gold); transform: scale(1.35); }
+/* Same compositor-only fade as .hero__dots — see the comment there. This
+   slider autoplays too (every 7s), so the same non-composited-animation
+   audit hit applies. */
+.tslider__dots button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.tslider__dots button.is-active { transform: scale(1.35); }
+.tslider__dots button.is-active::after { opacity: 1; }
 
 /* ==========================================================================
    Inquiry form

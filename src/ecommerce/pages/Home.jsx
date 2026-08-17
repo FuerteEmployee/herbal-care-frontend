@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TopBar from '../components/layout/TopBar.jsx';
 import Header from '../components/layout/Header.jsx';
@@ -79,7 +79,25 @@ export default function Home() {
   const pageRef = useRef(null);
   const hero = useSlider(HERO_SLIDES.length, 6000);
   const testimonials = useSlider(TESTIMONIALS.length, 7000);
-  useRevealOnMount(pageRef);
+  // Everything from the trust strip down mounts one frame after the hero, so
+  // the very first paint only has to lay out the header + hero (~80 nodes)
+  // instead of the whole page (~300+ nodes, most of it below the fold). A
+  // real trace (4x CPU throttle, matching Lighthouse's mobile preset) showed
+  // that first Layout pass alone costing ~525ms of the ~1050ms to first
+  // paint — content-visibility:auto on the sections below doesn't save this
+  // because the browser still has to lay the whole document out once before
+  // it knows what's off-screen. Deferring the mount by a frame means that
+  // first layout only ever sees the small tree; the rest lands in a second,
+  // much cheaper incremental layout right after. Nothing here is visible
+  // above the fold, so there's no CLS — the content only grows below
+  // whatever the visitor can already see.
+  const [ready, setReady] = useState(false);
+  useRevealOnMount(pageRef, [ready]);
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     document.title = "Herbal Gujarat | Herbal King's Man";
@@ -100,7 +118,7 @@ export default function Home() {
                   <img
                     src={slide.image}
                     alt="Herbal King's Man Ayurvedic Wellness"
-                    fetchpriority={index === 0 ? 'high' : 'low'}
+                    fetchPriority={index === 0 ? 'high' : 'low'}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     decoding="async"
                     width="1672"
@@ -161,6 +179,8 @@ export default function Home() {
         </div>
       </section>
 
+      {ready && (
+      <>
       <section className="trust">
         <div className="wrap">
           <div className="trust__in">
@@ -613,6 +633,8 @@ export default function Home() {
           other pages still use it. */}
 
       <Footer variant="full" />
+      </>
+      )}
     </main>
   );
 }

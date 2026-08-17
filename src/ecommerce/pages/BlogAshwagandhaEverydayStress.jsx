@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogPostLayout from '../components/BlogPostLayout.jsx';
 import { getRelatedPosts } from '../data/blogPosts.js';
-import hero2Image from '../assets/img/hero-2.png';
+import hero2Image from '../assets/img/hero-2.webp';
 
 export default function BlogAshwagandhaEverydayStress() {
   return (
