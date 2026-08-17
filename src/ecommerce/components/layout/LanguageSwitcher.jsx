@@ -467,49 +467,65 @@ export default function LanguageSwitcher({ onOpen }) {
   }
 
   useEffect(() => {
-    ensureWidget();
-
-    const cookieLang = readCookieLang();
-    const chosen = readStore(CHOICE_KEY);
     let cancelled = false;
 
-    // A recent explicit pick from the menu wins — never second-guess it with
-    // geo. Once it is older than CHOICE_TTL we drop it and detect again.
-    if (chosen && isSupported(chosen.code) && Date.now() - (chosen.at || 0) < CHOICE_TTL) {
-      setIsAuto(false);
-      setLang(chosen.code);
-      writeCookieLang(chosen.code);
-      if (chosen.code !== 'en') ensureApplied(chosen.code);
-      return undefined;
-    }
-    if (chosen) clearStore(CHOICE_KEY);
-
-    setLang(cookieLang);
-    if (cookieLang !== 'en') ensureApplied(cookieLang);
-
-    // Two passes, deliberately not one: the IP lookup answers in a few hundred
-    // milliseconds, so the page switches language almost immediately. GPS —
-    // only when permission was already granted, so this never prompts — can
-    // take seconds, and is used afterwards to correct the IP guess when the
-    // two disagree (mobile networks routinely geolocate to another state).
-    (async () => {
-      const ip = await detectRegionLang();
+    // The widget script, the geo-IP races and the cookie/DOM writes below are
+    // all invisible background work — nothing the visitor looks at needs them
+    // before first paint. Run them once the browser is idle rather than the
+    // instant Header mounts, so they don't compete with the hero image, the
+    // stylesheet and the app bundle for bandwidth during the LCP-critical
+    // window, and so the widget's own DOM rewrite (it can swap page text to
+    // the detected language) doesn't land mid-render and shift layout.
+    function run() {
       if (cancelled) return;
+      ensureWidget();
 
-      let applied = null;
-      if (applyDetected(ip)) {
-        applied = ip.code;
-      } else {
-        const fromBrowser = detectBrowserLang();
-        if (applyDetected(fromBrowser)) applied = fromBrowser.code;
+      const cookieLang = readCookieLang();
+      const chosen = readStore(CHOICE_KEY);
+
+      // A recent explicit pick from the menu wins — never second-guess it with
+      // geo. Once it is older than CHOICE_TTL we drop it and detect again.
+      if (chosen && isSupported(chosen.code) && Date.now() - (chosen.at || 0) < CHOICE_TTL) {
+        setIsAuto(false);
+        setLang(chosen.code);
+        writeCookieLang(chosen.code);
+        if (chosen.code !== 'en') ensureApplied(chosen.code);
+        return;
       }
+      if (chosen) clearStore(CHOICE_KEY);
 
-      const gps = await detectGpsLang();
-      if (!cancelled && gps && gps.code !== applied) applyDetected(gps);
-    })();
+      setLang(cookieLang);
+      if (cookieLang !== 'en') ensureApplied(cookieLang);
+
+      // Two passes, deliberately not one: the IP lookup answers in a few hundred
+      // milliseconds, so the page switches language almost immediately. GPS —
+      // only when permission was already granted, so this never prompts — can
+      // take seconds, and is used afterwards to correct the IP guess when the
+      // two disagree (mobile networks routinely geolocate to another state).
+      (async () => {
+        const ip = await detectRegionLang();
+        if (cancelled) return;
+
+        let applied = null;
+        if (applyDetected(ip)) {
+          applied = ip.code;
+        } else {
+          const fromBrowser = detectBrowserLang();
+          if (applyDetected(fromBrowser)) applied = fromBrowser.code;
+        }
+
+        const gps = await detectGpsLang();
+        if (!cancelled && gps && gps.code !== applied) applyDetected(gps);
+      })();
+    }
+
+    const idle = window.requestIdleCallback || ((cb) => window.setTimeout(cb, 200));
+    const cancelIdle = window.cancelIdleCallback || window.clearTimeout;
+    const handle = idle(run, { timeout: 2000 });
 
     return () => {
       cancelled = true;
+      cancelIdle(handle);
     };
   }, []);
 

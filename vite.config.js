@@ -74,20 +74,30 @@ export default defineConfig({
         admin: resolve(root, HTML.admin),
       },
       output: {
+        // Only `react`/`react-dom`/`react-router` are pinned to a manual chunk:
+        // both HTML entries genuinely need them, and pinning keeps that stable
+        // dependency cacheable across deploys instead of getting a new hash
+        // every time application code changes.
+        //
+        // Everything else is left to Rollup's automatic chunking. A prior
+        // version of this function also bucketed recharts/bwip-js/xlsx/
+        // socket.io-client/lucide-react/react-hook-form/zod/@hookform into one
+        // 'admin-vendor' chunk by module-id substring match, regardless of
+        // which entry actually reached them. Grouping by name rather than by
+        // reachability forced Rollup to treat that whole bundle as one
+        // physical chunk — and because at least one of those libraries has a
+        // CJS `require('react')` that Rollup's commonjs interop wired up as a
+        // real static import edge, the storefront's own entry chunk
+        // (main.jsx, which never imports any of those libraries itself) ended
+        // up with a static `import` of that entire chunk. That shipped ~392KB
+        // (~316KB unused, per Lighthouse) of admin-only charting/export/forms
+        // code — recharts, bwip-js, xlsx, socket.io-client — to every
+        // storefront page load. Automatic chunking places each module only in
+        // the chunks that actually reach it, which is what phase_12 of the
+        // performance audit requires: admin-only dependencies must not enter
+        // the storefront's initial dependency graph.
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (
-              id.includes('recharts') ||
-              id.includes('bwip-js') ||
-              id.includes('xlsx') ||
-              id.includes('socket.io-client') ||
-              id.includes('lucide-react') ||
-              id.includes('react-hook-form') ||
-              id.includes('zod') ||
-              id.includes('@hookform')
-            ) {
-              return 'admin-vendor';
-            }
             if (id.includes('react-router') || id.includes('react-dom') || id.includes('react')) {
               return 'framework';
             }

@@ -52,6 +52,17 @@ Options -MultiViews
   </FilesMatch>
 </IfModule>
 
+# mod_deflate ships with Apache far more often than mod_brotli does, so gzip
+# is the one to rely on here — same reasoning as the gzip block in
+# deploy/nginx.conf: the JS/CSS this build ships is ~3x smaller compressed.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain text/css text/xml text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE application/xml application/xml+rss
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/woff font/woff2 application/font-woff application/vnd.ms-fontobject
+</IfModule>
+
 # Netlify-only routing file; no meaning on Apache.
 <Files "_redirects">
   Require all denied

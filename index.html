@@ -40,13 +40,29 @@
 
     <!-- Meta Pixel Code -->
     <script>
+      /*
+       * The fbq() stub, the queue, and the init/PageView calls all stay
+       * synchronous and immediate — nothing here changes what gets tracked or
+       * when the first PageView is recorded, since calls made before
+       * fbevents.js loads just queue and flush once it does (that's what
+       * n.queue.push(arguments) is for).
+       *
+       * Only the network fetch of fbevents.js itself is pushed to idle time:
+       * it is ~100KB and was previously requested at the same instant as the
+       * hero image, the app bundle and the stylesheet, competing with them for
+       * bandwidth during the LCP-critical window. Delaying the script tag's
+       * insertion by a beat does not delay attribution — Meta's own snippet
+       * is built to tolerate exactly this.
+       */
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
       if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      n.queue=[];
+      function load(){t=b.createElement(e);t.async=!0;t.src=v;
+      s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+      if(f.requestIdleCallback)f.requestIdleCallback(load,{timeout:2000});
+      else f.setTimeout(load,1)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '934598776332135');
       fbq('track', 'PageView');
@@ -54,11 +70,24 @@
     <!-- End Meta Pixel Code -->
 
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-NG23DPXD');</script>
+    <script>
+      /*
+       * dataLayer is initialized and the 'gtm.start' timing mark is pushed
+       * immediately — cheap, no network cost, and needed in case anything
+       * pushes to dataLayer before GTM itself loads. Only the gtm.js fetch
+       * (~100KB) is deferred to idle time, for the same reason as the Meta
+       * Pixel script above: it was competing with the LCP image and the app
+       * bundle for bandwidth at the exact moment that mattered most.
+       */
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+      function loadGtm(){var f=document.getElementsByTagName('script')[0],
+      j=document.createElement('script');j.async=true;
+      j.src='https://www.googletagmanager.com/gtm.js?id=GTM-NG23DPXD';
+      f.parentNode.insertBefore(j,f)}
+      if(window.requestIdleCallback)window.requestIdleCallback(loadGtm,{timeout:3000});
+      else window.setTimeout(loadGtm,1);
+    </script>
     <!-- End Google Tag Manager -->
   </head>
   <body>
