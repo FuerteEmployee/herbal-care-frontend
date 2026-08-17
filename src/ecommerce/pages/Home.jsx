@@ -94,10 +94,7 @@ export default function Home() {
         <div className="slides">
           {HERO_SLIDES.map((slide, index) => (
             <article key={slide.eyebrow} className={`slide${index === hero.index ? ' is-active' : ''}`}>
-              <div
-                className="slide__bg"
-                style={{ backgroundImage: `url(${slide.image}),${slide.gradient}` }}
-              >
+              <div className="slide__bg" style={{ background: slide.gradient }}>
                 <picture>
                   <source media="(max-width: 768px)" srcSet={slide.imageMobile} type="image/webp" />
                   <img
@@ -108,7 +105,7 @@ export default function Home() {
                     decoding="async"
                     width="1672"
                     height="941"
-                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </picture>
               </div>
@@ -116,7 +113,7 @@ export default function Home() {
                 <div className="wrap">
                   <div className="slide__body">
                     <span className="eyebrow">{slide.eyebrow}</span>
-                    <h1>{slide.heading}</h1>
+                    {index === 0 ? <h1>{slide.heading}</h1> : <h2 className="slide__title">{slide.heading}</h2>}
                     <p>{slide.body}</p>
                     <ul className="slide__tags">
                       {slide.tags.map((tag) => (
@@ -124,7 +121,7 @@ export default function Home() {
                       ))}
                     </ul>
                     <div className="slide__btns">
-                      <Link to="/checkout?pack=combo" className="btn btn--gold btn--lg">
+                      <Link to="/checkout?pack=combo" className="btn btn--gold btn--lg" aria-label="Book King's Man combo pack now">
                         Book Now
                       </Link>
                       <a href={slide.secondaryCta.to} className="btn btn--ghost btn--lg">

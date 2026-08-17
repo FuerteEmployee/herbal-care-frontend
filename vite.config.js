@@ -60,6 +60,14 @@ export default defineConfig({
   build: {
     target: 'es2022',
     cssCodeSplit: true,
+    modulePreload: {
+      resolveDependencies(filename, deps, { hostId }) {
+        if (hostId && hostId.includes('index.html')) {
+          return deps.filter((dep) => !dep.includes('admin'));
+        }
+        return deps;
+      },
+    },
     rollupOptions: {
       input: {
         main: resolve(root, HTML.main),

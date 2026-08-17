@@ -406,13 +406,14 @@ ul { margin: 0; padding: 0; list-style: none; }
 .slide__bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
   transform: scale(1.06);
   transition: transform 8s linear;
+}
+.slide.is-active .slide__bg {
+  transform: scale(1);
   will-change: transform;
 }
-.slide.is-active .slide__bg { transform: scale(1); }
 /* Scrim: heavy on the left so the copy stays legible, clearing to almost
    nothing on the right so the product photography reads. */
 .slide::after {
@@ -435,8 +436,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   padding: 70px 0;
 }
 .slide__body { max-width: 640px; }
-.slide__body h1 { color: var(--white); margin-bottom: .35em; }
-.slide__body h1 em {
+.slide__body h1, .slide__body .slide__title { color: var(--white); margin-bottom: .35em; font-size: clamp(2.1rem, 5.2vw, 3.9rem); }
+.slide__body h1 em, .slide__body .slide__title em {
   display: block;
   font-style: normal;
   background: var(--gold-grad);
